@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Home, SignIn, Match, Team, Matches } from './views';
+import { fetchUser, fetchTeams, fetchMatches } from './actions';
+import { Header } from './components';
+import { CssBaseline } from '@material-ui/core';
+
+class App extends Component {
+  componentDidMount() {
+    this.initializeApp();
+  }
+
+  initializeApp = () => {
+    this.props.fetchUser();
+    this.props.fetchTeams();
+    this.props.fetchMatches();
+  };
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <>
+            <CssBaseline />
+            <Header />
+            <main className="container">
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={SignIn} />
+              <Route exact path="/match/:id" component={Match} />
+              <Route exact path="/addPlayer" component={Team} />
+              <Route exact path="/addMatch" component={Matches} />
+              {/* <Route path="/app" component={Authorize(ToDoList)} /> */}
+            </main>
+          </>
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+export default connect(
+  null,
+  { fetchUser, fetchTeams, fetchMatches }
+)(App);
