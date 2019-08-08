@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Grid, Typography, Card, Select, MenuItem, Button } from '@material-ui/core';
+import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import { TableCell, TableRow } from '@material-ui/core';

@@ -10,8 +10,7 @@ import { StyledTableCell, StyledTableRow } from '../../components';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto'
+    marginTop: theme.spacing(3)
   },
   table: {
     minWidth: 700,
@@ -35,28 +34,26 @@ const PointsTable = ({ teams }) => {
 
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="center">Pos.</StyledTableCell>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="center">W</StyledTableCell>
-            <StyledTableCell align="center">L</StyledTableCell>
-            <StyledTableCell align="center">T</StyledTableCell>
-            <StyledTableCell align="center">Goals</StyledTableCell>
-            <StyledTableCell align="center">GD</StyledTableCell>
-            <StyledTableCell align="center">Pts</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {isLoading ? (
-            <StyledTableRow>
-              <StyledTableCell align="center" colSpan={8}>
-                <CircularProgress />
-              </StyledTableCell>
-            </StyledTableRow>
-          ) : (
-            sortedList(list).map((team, idx) => (
+      {isLoading ? (
+        <div className="loader-wrapper">
+          <CircularProgress />
+        </div>
+      ) : (
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align="center">Pos.</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="center">W</StyledTableCell>
+              <StyledTableCell align="center">L</StyledTableCell>
+              <StyledTableCell align="center">T</StyledTableCell>
+              <StyledTableCell align="center">Goals</StyledTableCell>
+              <StyledTableCell align="center">GD</StyledTableCell>
+              <StyledTableCell align="center">Pts</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortedList(list).map((team, idx) => (
               <StyledTableRow key={team.name}>
                 <StyledTableCell align="center">{idx + 1}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
@@ -73,10 +70,10 @@ const PointsTable = ({ teams }) => {
                   {pointsCalculator(team.wins, team.tie)}
                 </StyledTableCell>
               </StyledTableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </Paper>
   );
 };

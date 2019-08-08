@@ -1,15 +1,22 @@
 import { authRef, provider, fireStoreRef } from '../config/firebase';
-import { FETCH_USER } from './types';
+import { FETCH_USER, SET_ADMIN } from './types';
 import * as R from 'ramda';
 
 export const fetchUser = () => dispatch => {
   authRef.onAuthStateChanged(user => {
     if (user) {
       fireStoreRef.doc(`users/${user.uid}`).onSnapshot(snapShot => {
+        const user = snapShot.data();
         dispatch({
           type: FETCH_USER,
-          payload: snapShot.data()
+          payload: user
         });
+        if (R.equals('admin', R.propOr('', 'role', user))) {
+          dispatch({
+            type: SET_ADMIN,
+            payload: true
+          });
+        }
       });
     } else {
       dispatch({
@@ -40,8 +47,7 @@ const updateUser = user => {
         uid: user.uid,
         photoURL: user.photoURL,
         email: user.email,
-        displayName: user.displayName,
-        role: 'sub'
+        displayName: user.displayName
       },
       { merge: true }
     );
@@ -51,7 +57,14 @@ export const signOut = () => dispatch => {
   authRef
     .signOut()
     .then(() => {
-      // Sign-out successful.
+      dispatch({
+        type: SET_ADMIN,
+        payload: false
+      });
+      dispatch({
+        type: FETCH_USER,
+        payload: null
+      });
     })
     .catch(error => {
       console.log(error);

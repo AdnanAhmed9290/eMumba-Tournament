@@ -1,12 +1,20 @@
 export default {
-  Home: {
-    path: '/',
-    title: 'Home',
-    icon: ''
+  Table: {
+    path: '/table',
+    title: 'Points Table',
+    icon: 'table',
+    requireAdmin: false
   },
-  Login: {
-    path: '/login',
-    title: 'Login',
-    icon: ''
+  Matches: {
+    path: '/matches',
+    title: 'Matches',
+    icon: 'matches',
+    requireAdmin: false
+  },
+  AddMatch: {
+    path: '/addMatch',
+    title: 'Add New Match',
+    icon: 'match',
+    requireAdmin: true
   }
 };

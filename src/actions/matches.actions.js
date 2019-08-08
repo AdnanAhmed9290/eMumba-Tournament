@@ -1,7 +1,8 @@
 import { fireStoreRef } from '../config/firebase';
 import { FETCH_MATCHES, FETCH_MATCHES_LOADING, FETCH_MATCH } from './types';
 import * as R from 'ramda';
-import { isSomething } from './../utils';
+import { isSomething, isNothing } from './../utils';
+import { setToast } from './app.actions';
 
 const fetchingMatches = bool => {
   return {
@@ -19,34 +20,54 @@ const splitNameWithId = team => {
 };
 
 export const addMatch = values => {
-  const { time, matchday, matchStatus, team1 = '', team2 = '' } = values;
+  return dispatch => {
+    const { time, matchday, matchStatus, team1 = '', team2 = '' } = values;
 
-  const match = {
-    time: time,
-    matchday: matchday,
-    matchStatus: matchStatus,
-    teams: [
-      {
-        ...splitNameWithId(team1),
-        score: 0
-      },
-      {
-        ...splitNameWithId(team2),
-        score: 0
-      }
-    ]
+    const match = {
+      time: time,
+      matchday: matchday,
+      matchStatus: matchStatus,
+      teams: [
+        {
+          ...splitNameWithId(team1),
+          score: 0
+        },
+        {
+          ...splitNameWithId(team2),
+          score: 0
+        }
+      ]
+    };
+
+    fireStoreRef
+      .collection('matches')
+      .add(match)
+      .then(() => {
+        dispatch(setToast('Match Successfully Added!', 'success'));
+      });
   };
-
-  fireStoreRef.collection('matches').add(match);
 };
 
 export const setMatchStatus = (matchStatus, matchId) => {
-  fireStoreRef.doc(`matches/${matchId}`).set(
-    {
-      matchStatus
-    },
-    { merge: true }
-  );
+  return (dispatch, getState) => {
+    fireStoreRef.doc(`matches/${matchId}`).set(
+      {
+        matchStatus
+      },
+      { merge: true }
+    );
+
+    if (matchStatus === 'live') {
+      const selectedMatch = R.pathOr({}, ['matches', 'selectedMatch'], getState());
+      const [homeTeam = '', awayTeam = ''] = R.pipe(
+        R.propOr([], 'teams'),
+        R.pluck('name')
+      )(selectedMatch);
+      dispatch(
+        setToast(`${homeTeam.toUpperCase()} vs ${awayTeam.toUpperCase()} match started!`, 'info')
+      );
+    }
+  };
 };
 
 export const setMatchGoal = (teamId, player) => {
@@ -71,7 +92,75 @@ export const setMatchGoal = (teamId, player) => {
       selectedMatch
     );
 
-    fireStoreRef.doc(`matches/${matchId}`).set(updatedMatch, { merge: true });
+    fireStoreRef
+      .doc(`matches/${matchId}`)
+      .set(updatedMatch, { merge: true })
+      .then(() => {
+        dispatch(
+          setToast(`Goal Scored By ${splitNameWithId(player).name.toUpperCase()}`, 'success')
+        );
+      });
+  };
+};
+
+const getTeamInfo = (currentScore, currentTeam, otherTeam) => {
+  const { wins, loss, tie, gs, ga, id } = currentTeam;
+  const scoreComparator = currentScore - otherTeam.score;
+  const goalsObj = {
+    id,
+    gs: R.add(currentScore, gs),
+    ga: R.add(otherTeam.score, ga)
+  };
+  if (scoreComparator < 0) {
+    return {
+      loss: R.inc(loss),
+      ...goalsObj
+    };
+  } else if (scoreComparator === 0) {
+    return {
+      tie: R.inc(tie),
+      ...goalsObj
+    };
+  } else if (scoreComparator > 0) {
+    return {
+      wins: R.inc(wins),
+      ...goalsObj
+    };
+  }
+};
+
+export const endLiveMatch = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selectedMatch = R.pathOr({}, ['matches', 'selectedMatch'], state);
+    const matchId = R.propOr('', 'id', selectedMatch);
+    const teamsList = R.pathOr([], ['teams', 'list'], state);
+    const selectedTeams = R.pipe(
+      R.propOr([], 'teams'),
+      R.map(R.pick(['id', 'score'])),
+      teams =>
+        teams.map(({ id, score }, index) => {
+          const currentTeam = R.find(R.propEq('id', id), teamsList);
+          const otherTeam = R.equals(index, 0) ? teams[1] : teams[0];
+          return getTeamInfo(score, currentTeam, otherTeam);
+        })
+    )(selectedMatch);
+
+    fireStoreRef
+      .doc(`matches/${matchId}`)
+      .set(
+        {
+          matchStatus: 'ft'
+        },
+        { merge: true }
+      )
+      .then(() => {
+        dispatch(setToast(`Match Ended!`, 'info'));
+      });
+
+    selectedTeams.forEach(team => {
+      fireStoreRef.doc(`teams/${team.id}`).set(team, { merge: true });
+    });
   };
 };
 
@@ -109,6 +198,8 @@ export function fetchMatch(id) {
     try {
       fireStoreRef.doc(`matches/${id}`).onSnapshot(async snapshot => {
         const data = snapshot.data();
+
+        if (isNothing(data)) return;
         let { teams = [] } = data;
 
         teams.forEach(async (team, index) => {

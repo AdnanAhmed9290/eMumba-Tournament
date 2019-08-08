@@ -1,8 +1,8 @@
-export { default as PointsTable } from './PointsTable/PointsTable';
 export { default as TabPanel } from './TabPanel/TabPanel';
-export { default as Authorize } from './Auth/requireAuth';
+export { default as requireAdmin } from './Auth/requireAuth';
 export { default as MatchCard } from './MatchCard/MatchCard';
-export { default as MatchList } from './MatchList/MatchList';
-export { default as Header } from './Header/Header';
+export { default as Layout } from './Layout/Layout';
+export { default as Snackbar } from './Snackbar/Snackbar';
+export { default as MatchControlComponent } from './MatchControlComponent/MatchControlComponent';
 export * from './StyledTableComponents/StyledTableComponents';
 export * from './FormFields';

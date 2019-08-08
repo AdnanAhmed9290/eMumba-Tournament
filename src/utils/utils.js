@@ -1,8 +1,13 @@
 import React from 'react';
 import * as R from 'ramda';
 import moment from 'moment';
-import classnames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
+
+import * as alphaImage from '../assets/alpha.png';
+import * as bravoImage from '../assets/bravo.jpg';
+import * as charlieImage from '../assets/charlie.png';
+import * as deltaImage from '../assets/delta.png';
+import * as eagleImage from '../assets/eagle.png';
+import * as defaultTeam from '../assets/default-team.png';
 
 export const getRandomInt = () => {
   return Math.floor(Math.random() * Math.floor(99999));
@@ -47,21 +52,6 @@ export const getPlayerPosition = position => {
   }
 };
 
-const useStyles = makeStyles(theme => ({
-  span: {
-    float: 'right'
-  },
-  live: {
-    color: 'red'
-  },
-  ft: {
-    color: 'green'
-  },
-  pending: {
-    color: 'grey'
-  }
-}));
-
 export const getMatchStatus = status => {
   switch (status) {
     case 'live':
@@ -73,3 +63,32 @@ export const getMatchStatus = status => {
       return 'To be Played';
   }
 };
+
+export const getTeamIcon = team => {
+  switch (team) {
+    case 'Alpha':
+      return alphaImage;
+    case 'Bravo':
+      return bravoImage;
+    case 'Charlie':
+      return charlieImage;
+    case 'Delta':
+      return deltaImage;
+    case 'Eagles':
+    case 'Eagle':
+      return eagleImage;
+    case 'Foxtrot':
+    default:
+      return defaultTeam;
+  }
+};
+
+export const getScorerList = R.pipe(
+  R.propOr([], 'scorer'),
+  R.pluck('name'),
+  R.sort(R.ascend(R.identity)),
+  R.groupBy(R.identity),
+  R.map(R.length),
+  R.toPairs,
+  R.map(([player, goals]) => `${player} (${goals})`)
+);

@@ -11,6 +11,7 @@ import {
 import * as R from 'ramda';
 import { makeStyles } from '@material-ui/styles';
 import moment from 'moment';
+import classnames from 'classnames';
 
 import MomentUtils from '@date-io/moment'; // choose your lib
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -20,6 +21,7 @@ import { isSomething } from '../utils';
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 400,
+    width: '100%',
     marginBottom: 10
   },
   input: {
@@ -62,6 +64,7 @@ export const SmartTextField = props => {
 };
 
 export const SmartSelectField = props => {
+  const classes = useStyles();
   const {
     id,
     input,
@@ -81,19 +84,16 @@ export const SmartSelectField = props => {
 
   return (
     <Grid container alignItems="center">
-      <div className="material-select-wrapper">
-        <FormControl
-          style={{
-            width: 400
-          }}
-          error={isError}
-          fullWidth={fullWidth}
-          className={className}>
+      <div className={classnames(classes.root, 'material-select-wrapper')}>
+        <FormControl error={isError} fullWidth={fullWidth} className={className}>
           <InputLabel htmlFor={`${id}_label`}>{label}</InputLabel>
           <Select
             {...input}
             multiple={multiple}
             disabled={disabled}
+            classes={{
+              root: classes.root
+            }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -135,7 +135,8 @@ export const SmartSelect = props => {
   return (
     <FormControl
       style={{
-        width
+        width: '100%',
+        maxWidth: width
       }}
       fullWidth={fullWidth}
       className={className}>
@@ -182,6 +183,7 @@ export const SmartDateTimePicker = ({
     <div>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <DateTimePicker
+          style={{ width: '100%', maxWidth: 400 }}
           value={input.value ? moment(input.value) : moment()}
           onChange={dateTime => input.onChange(moment(dateTime).format())}
           label={label}

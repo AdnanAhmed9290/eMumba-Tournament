@@ -2,38 +2,56 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { AppBar, Toolbar, Typography, Link, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import classnames from 'classnames';
 
 import { signIn, signOut } from '../../actions';
 
 // Icons
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
-import LoginIcon from '@material-ui/icons/LocalGasStation';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
+import LoginIcon from '@material-ui/icons/LockOpen';
+import MenuIcon from '@material-ui/icons/Menu';
+
+import * as logo from '../../assets/logo-1.png';
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   icon: {
     marginRight: theme.spacing(2)
   },
-  appBar: {
-    borderBottom: `1px solid ${theme.palette.divider}`
-  },
   toolbar: {
     flexWrap: 'wrap'
   },
   toolbarTitle: {
-    flexGrow: 1
+    flexGrow: 1,
+    marginLeft: 10
   },
   link: {
     margin: theme.spacing(1, 1.5)
   },
   avatar: {
-    marginRight: theme.spacing(1),
+    marginRight: '15px',
     borderRadius: '50%'
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
   }
 }));
 
-const Header = ({ auth, signIn, signOut }) => {
+const Header = ({ auth, signIn, signOut, isAdmin, showSideNav, handleDrawerOpen }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(undefined);
@@ -47,20 +65,42 @@ const Header = ({ auth, signIn, signOut }) => {
   }
 
   return (
-    <AppBar position="static" color="default" elevation={0}>
+    <AppBar
+      position="absolute"
+      color="default"
+      elevation={0}
+      className={classnames(
+        'header',
+        { open: showSideNav },
+        classes.appBar,
+        showSideNav && classes.appBarShift
+      )}>
       <Toolbar className={classes.toolbar}>
-        <CameraIcon className={classes.icon} />
-        <Typography variant="h6" color="inherit" className={classes.toolbarTitle}>
-          Futsal Championship
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="Open drawer"
+          onClick={() => handleDrawerOpen(true)}
+          className={classnames({
+            'menu-button': true,
+            hidden: showSideNav
+          })}>
+          <MenuIcon />
+        </IconButton>
+        <img src={logo} className="logo" alt="logo" width="50" />
+        <Typography
+          variant="h6"
+          color="inherit"
+          noWrap
+          className={classnames('app-title', classes.toolbarTitle)}>
+          eMumba Champions Cup
         </Typography>
         <div>
-          <Link variant="button" color="textPrimary" href="/" className={classes.link}>
-            Home
-          </Link>
           <IconButton
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={handleClick}
+            className="account-btn"
             color="inherit">
             <AccountCircle />
           </IconButton>
@@ -85,9 +125,10 @@ const Header = ({ auth, signIn, signOut }) => {
             ) : (
               <>
                 <MenuItem>
-                  <img src={auth.photoURL} alt=".,." className={classes.avatar} width="40" />
+                  <img src={auth.photoURL} alt=".." className={classes.avatar} width="30" />
                   <Typography variant="subheading">{auth.displayName || auth.email}</Typography>
                 </MenuItem>
+
                 <MenuItem onClick={signOut}>
                   <LogoutIcon className={classes.icon} />
                   Logout
@@ -101,7 +142,7 @@ const Header = ({ auth, signIn, signOut }) => {
   );
 };
 
-const mapStateToProps = ({ auth }) => ({ auth });
+const mapStateToProps = ({ auth, isAdmin }) => ({ auth, isAdmin });
 
 export default connect(
   mapStateToProps,

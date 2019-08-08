@@ -9,3 +9,6 @@ export const FETCH_PLAYERS_LOADING = 'FETCH_PLAYERS_LOADING';
 
 export const FETCH_TEAMS = 'FETCH_TEAMS';
 export const FETCH_TEAMS_LOADING = 'FETCH_TEAMS_LOADING';
+
+export const SET_ADMIN = 'SET_ADMIN';
+export const SET_TOAST = 'SET_TOAST';

@@ -9,14 +9,14 @@ export default function(ComposedComponent) {
     };
 
     componentWillMount() {
-      if (this.props.authenticated === null) {
-        this.context.router.history.push('/login');
+      if (this.props.authenticated === false) {
+        this.context.router.history.push('/');
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        this.context.router.history.push('/login');
+        this.context.router.history.push('/');
       }
     }
 
@@ -28,9 +28,7 @@ export default function(ComposedComponent) {
     }
   }
 
-  function mapStateToProps(state) {
-    return { authenticated: state.auth };
-  }
+  const mapStateToProps = ({ isAdmin }) => ({ authenticated: isAdmin });
 
   return connect(mapStateToProps)(Authentication);
 }

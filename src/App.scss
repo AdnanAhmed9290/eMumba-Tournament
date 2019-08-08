@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+
+* {
+  font-family: 'Roboto';
+}
+
+body {
+  background: #fafafa;
+  overflow-y: scroll;
+  font-family: 'Roboto';
+}
+
+.loader-wrapper {
+  width: 100%;
+  height: 400px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+@media only screen and (max-width: 600px) {
+  .match-container {
+    .team-title {
+      b {
+        display: none;
+      }
+    }
+
+    .goals-select-wrapper {
+      justify-content: center;
+    }
+  }
+
+  .header {
+    .logo {
+      margin-left: 20px;
+    }
+    &.open {
+      .app-title,
+      .account-btn {
+        display: none;
+      }
+    }
+  }
+}
