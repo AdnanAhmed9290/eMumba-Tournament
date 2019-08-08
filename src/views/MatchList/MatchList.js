@@ -11,7 +11,6 @@ const useStyles = theme => ({
   root: {
     padding: theme.spacing(2),
     backgroundColor: 'unset',
-    overflowX: 'auto',
     minWidth: 325,
     [theme.breakpoints.down('sm')]: {
       padding: 0

@@ -306,10 +306,9 @@ Match = withStyles(theme => ({
   },
   cardStyling: {
     padding: 10,
-    margin: '20px 0',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    minWidth: 320
+    marginBottom: 25,
+    overflow: 'hidden',
+    minWidth: 315
   },
   live: {
     color: 'red'

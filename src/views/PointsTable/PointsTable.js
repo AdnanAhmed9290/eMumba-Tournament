@@ -33,7 +33,9 @@ const PointsTable = ({ teams }) => {
 
   const sortedList = R.sortWith([
     R.descend(R.prop('wins')),
-    R.descend(x => R.prop('gs', x) - R.prop('ga', x))
+    R.descend(R.prop('tie')),
+    R.descend(x => R.prop('gs', x) - R.prop('ga', x)),
+    R.descend(R.prop('gs'))
   ]);
 
   return (
