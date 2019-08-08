@@ -9,8 +9,12 @@ import { StyledTableCell, StyledTableRow } from '../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
+    overflowX: 'auto',
+    margin: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      margin: 0
+    }
   },
   table: {
     minWidth: 700,

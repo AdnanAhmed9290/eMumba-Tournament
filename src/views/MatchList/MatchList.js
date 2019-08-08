@@ -9,9 +9,13 @@ import { connect } from 'react-redux';
 
 const useStyles = theme => ({
   root: {
-    width: '100%',
     padding: theme.spacing(2),
-    backgroundColor: 'unset'
+    backgroundColor: 'unset',
+    overflowX: 'auto',
+    minWidth: 325,
+    [theme.breakpoints.down('sm')]: {
+      padding: 0
+    }
   },
   title: {
     padding: '5px'

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Paper, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import * as R from 'ramda';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -11,15 +12,27 @@ import { matchDays, matchStatus } from '../../constants';
 import { required } from '../../utils';
 import moment from 'moment';
 
+const useStyles = theme => ({
+  root: {
+    padding: theme.spacing(2),
+    backgroundColor: 'unset',
+    overflowX: 'auto',
+    margin: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      margin: 0
+    }
+  }
+});
 class AddMatch extends Component {
   render() {
     const {
       invalid,
       handleSubmit,
+      classes,
       teams: { list = [] }
     } = this.props;
     return (
-      <Paper style={{ padding: 15, margin: '20px 0' }}>
+      <Paper className={classes.root}>
         <Typography variant="h5">Add New Match</Typography>
         <form onSubmit={handleSubmit}>
           <Field
@@ -100,6 +113,8 @@ AddMatch = reduxForm({
   form: 'addMatchForm',
   onSubmit
 })(AddMatch);
+
+AddMatch = withStyles(useStyles)(AddMatch);
 
 const mapStateToProps = ({ teams, matches }) => ({
   teams,

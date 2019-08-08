@@ -73,7 +73,7 @@ class Match extends Component {
     const { classes } = this.props;
     const { players = [], name = '' } = team;
     return (
-      <Paper className={classes.root} elevation={0}>
+      <Paper elevation={0}>
         <Typography variant="h5" className={classnames(classes.alignContent, classes.title)}>
           <img className={classes.icon} alt="Team Icon" src={getTeamIcon(name)} />
           <b>{name}</b>
@@ -116,7 +116,7 @@ class Match extends Component {
     const isMatchToBePlayed = R.equals('pending', matchStatus);
 
     return (
-      <div className="match-container">
+      <div className={classnames('match-container', classes.root)}>
         <Card className={classes.cardStyling}>
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={3} sm={4}>
@@ -273,8 +273,10 @@ class Match extends Component {
 
 Match = withStyles(theme => ({
   root: {
-    width: '100%',
-    overflowX: 'auto'
+    margin: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      margin: 0
+    }
   },
   flex: {
     display: 'flex'
@@ -304,7 +306,10 @@ Match = withStyles(theme => ({
   },
   cardStyling: {
     padding: 10,
-    margin: '20px 0'
+    margin: '20px 0',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    minWidth: 320
   },
   live: {
     color: 'red'
