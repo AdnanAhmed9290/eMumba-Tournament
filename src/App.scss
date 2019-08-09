@@ -35,11 +35,5 @@ body {
     .logo {
       margin-left: 20px;
     }
-    &.open {
-      .app-title,
-      .account-btn {
-        display: none;
-      }
-    }
   }
 }

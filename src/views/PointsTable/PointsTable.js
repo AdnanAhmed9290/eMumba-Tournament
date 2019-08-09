@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   table: {
-    minWidth: 700,
+    // minWidth: 700,
     minHeight: 400
   }
 }));

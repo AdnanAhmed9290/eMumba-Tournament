@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { AppBar, Toolbar, Typography, Link, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 
@@ -13,8 +13,6 @@ import LoginIcon from '@material-ui/icons/LockOpen';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import * as logo from '../../assets/logo-1.png';
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -42,8 +40,8 @@ const useStyles = makeStyles(theme => ({
     })
   },
   appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    // marginLeft: drawerWidth,
+    // width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
@@ -80,10 +78,10 @@ const Header = ({ auth, signIn, signOut, isAdmin, showSideNav, handleDrawerOpen 
           edge="start"
           color="inherit"
           aria-label="Open drawer"
-          onClick={() => handleDrawerOpen(true)}
+          onClick={() => handleDrawerOpen(!showSideNav)}
           className={classnames({
-            'menu-button': true,
-            hidden: showSideNav
+            'menu-button': true
+            // hidden: showSideNav
           })}>
           <MenuIcon />
         </IconButton>

@@ -16,8 +16,6 @@ import classnames from 'classnames';
 import MomentUtils from '@date-io/moment'; // choose your lib
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-import { isSomething } from '../utils';
-
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 400,

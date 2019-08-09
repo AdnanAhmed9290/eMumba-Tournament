@@ -1,28 +1,5 @@
 $side-nav: '.side-nav';
 
 #{$side-nav} {
-  &__nav-list {
-    // &__nav-link {
-    //   display: block;
-    //   color: #767980;
-
-    //   .icon {
-    //     color: #767980;
-    //   }
-
-    //   &--active {
-    //     color: #ffffff;
-    //     background: #f39c12;
-
-    //     .icon {
-    //       color: #ffffff;
-    //     }
-    //   }
-
-    //   &:hover > div {
-    //     color: #ffffff;
-    //     background: #f39c12;
-    //   }
-    // }
-  }
+  padding-top: 60px;
 }

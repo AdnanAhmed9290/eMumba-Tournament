@@ -12,3 +12,4 @@ export const FETCH_TEAMS_LOADING = 'FETCH_TEAMS_LOADING';
 
 export const SET_ADMIN = 'SET_ADMIN';
 export const SET_TOAST = 'SET_TOAST';
+export const SET_TOP_GOALSCORERS = 'SET_TOP_GOALSCORERS';

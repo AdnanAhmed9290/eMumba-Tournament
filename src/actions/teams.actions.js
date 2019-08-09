@@ -1,6 +1,6 @@
 import { fireStoreRef } from '../config/firebase';
-import { FETCH_TEAMS, FETCH_TEAMS_LOADING } from './types';
-// import * as R from 'ramda';
+import { FETCH_TEAMS, FETCH_TEAMS_LOADING, SET_TOP_GOALSCORERS } from './types';
+import * as R from 'ramda';
 
 const fetchingTeams = bool => {
   return {
@@ -15,6 +15,41 @@ export function addPlayer(values) {
     teamRef: `teams/${values.teamId}`
   });
 }
+
+export const getTopScorer = () => dispatch => {
+  fireStoreRef.collection('matches').onSnapshot(snapshot => {
+    let scorer = [];
+    snapshot.forEach(match => {
+      const goalScorers = R.pipe(
+        R.propOr([], 'teams'),
+        R.pluck('scorer'),
+        R.without([undefined, null]),
+        R.flatten,
+        R.defaultTo([])
+      )(match.data());
+      scorer.push(goalScorers);
+    });
+
+    const topGoalScorers = R.pipe(
+      R.flatten,
+      R.sort(R.ascend(R.prop('id'))),
+      R.groupBy(R.prop('id')),
+      R.values,
+      R.sort(R.descend(R.length)),
+      R.map(item => ({
+        player: R.head(item),
+        goals: R.length(item)
+      })),
+      R.slice(0, 10)
+    )(scorer);
+    console.log(' ================== Scorers ===============');
+    console.log('Scorers: ', topGoalScorers);
+    dispatch({
+      type: SET_TOP_GOALSCORERS,
+      payload: topGoalScorers
+    });
+  });
+};
 
 export const fetchTeams = () => dispatch => {
   dispatch(fetchingTeams(true));

@@ -11,6 +11,12 @@ export default {
     icon: 'matches',
     requireAdmin: false
   },
+  Stats: {
+    path: '/stats',
+    title: 'Stats',
+    icon: 'stats',
+    requireAdmin: false
+  },
   AddMatch: {
     path: '/addMatch',
     title: 'Add New Match',

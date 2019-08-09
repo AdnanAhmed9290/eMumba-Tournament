@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import { TableCell, TableRow } from '@material-ui/core';
 

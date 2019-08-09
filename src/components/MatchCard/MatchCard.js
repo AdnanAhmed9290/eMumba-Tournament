@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import { matchDate, matchTime, getMatchStatus, getTeamIcon } from '../../utils';
 
-import { equals } from 'ramda';
-
 const useStyles = makeStyles(theme => ({
   root: {
     padding: '1em',
@@ -53,7 +51,7 @@ function MatchCard({ match, handleOnClick }) {
         </Grid>
         <Grid item xs={12} sm={12}>
           {teams.map(team => (
-            <Grid container style={{ marginBottom: 10 }} alignItems="center">
+            <Grid container style={{ marginBottom: 10 }} key={team.id} alignItems="center">
               <Grid item xs={9} sm={9}>
                 <Typography className={classes.alignContent}>
                   <img className={classes.icon} alt="Team Icon" src={getTeamIcon(team.name)} />

@@ -1,7 +1,7 @@
 import { fireStoreRef } from '../config/firebase';
 import { FETCH_MATCHES, FETCH_MATCHES_LOADING, FETCH_MATCH } from './types';
 import * as R from 'ramda';
-import { isSomething, isNothing } from './../utils';
+import { isNothing } from './../utils';
 import { setToast } from './app.actions';
 
 const fetchingMatches = bool => {
@@ -134,6 +134,7 @@ export const endLiveMatch = () => {
     const state = getState();
     const selectedMatch = R.pathOr({}, ['matches', 'selectedMatch'], state);
     const matchId = R.propOr('', 'id', selectedMatch);
+    const matchDay = R.propOr('', 'matchday', selectedMatch);
     const teamsList = R.pathOr([], ['teams', 'list'], state);
     const selectedTeams = R.pipe(
       R.propOr([], 'teams'),
@@ -158,9 +159,11 @@ export const endLiveMatch = () => {
         dispatch(setToast(`Match Ended!`, 'info'));
       });
 
-    selectedTeams.forEach(team => {
-      fireStoreRef.doc(`teams/${team.id}`).set(team, { merge: true });
-    });
+    if (!R.contains(matchDay, ['Semifinal', 'Final'])) {
+      selectedTeams.forEach(team => {
+        fireStoreRef.doc(`teams/${team.id}`).set(team, { merge: true });
+      });
+    }
   };
 };
 

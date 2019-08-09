@@ -39,20 +39,12 @@
 }
 
 .header {
-  // height: 100%;
-
   &__toolbar {
     padding-right: 24;
   }
 
   .logo {
     margin-left: 35px;
-  }
-
-  &.open {
-    .logo {
-      margin-left: 0;
-    }
   }
 
   .MuiDrawer-docked {
