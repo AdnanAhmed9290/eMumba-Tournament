@@ -33,7 +33,7 @@ class MatchList extends React.Component {
   render() {
     const { classes, matches = [] } = this.props;
     const { isLoading = false, list = [] } = matches;
-    const groupedMatches = R.groupBy(R.prop('matchday'), R.reverse(list));
+    const groupedMatches = R.groupBy(R.prop('matchday'), list);
 
     return (
       <Paper className={classes.root} elevation={0.2}>
@@ -56,7 +56,7 @@ class MatchList extends React.Component {
                   ))}
                 </>
               );
-            }, R.toPairs(groupedMatches))}
+            }, R.reverse(R.toPairs(groupedMatches)))}
           </Grid>
         )}
       </Paper>
