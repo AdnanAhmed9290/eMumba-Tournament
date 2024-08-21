@@ -31,9 +31,6 @@ class App extends Component {
               <Route path="/login" component={SignIn} />
               <Route exact path="/matches" component={MatchList} />
               <Route path="/matches/:id" component={Match} />
-              <Route path="/addPlayer" component={requireAdmin(Team)} />
-              <Route path="/addMatch" component={AddMatch} />
-              <Route path="/stats" component={Stats} />
             </>
           </Switch>
           <Snackbar />

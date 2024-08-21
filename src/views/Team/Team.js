@@ -23,7 +23,7 @@ class AddPlayer extends Component {
           className="fld-new"
           name="name"
           label="Player Name"
-          component={SmartTextField}
+          component={SmartTextFields}
         />
 
         <Field
